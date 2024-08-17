@@ -10,7 +10,19 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'discuss.wxpython.org',
+        hostname: '*.wxpython.org',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.pngtree.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.vexels.com',
         port: '',
         pathname: '/**',
       },
