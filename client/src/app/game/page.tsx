@@ -14,9 +14,9 @@ import {
 const Game = () => {
   const [isNewRound, setIsNewRound] = useState(false);
   const [isCorrectGuess, setIsCorrectGuess] = useState(false);
-  const [correctAnimal, setCorrectAnimal] = useState("a");
+  const [correctAnimal, setCorrectAnimal] = useState("");
   const [selectedAnimal, setSelectedAnimal] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     socket.on("guess_animal", () => {
@@ -24,6 +24,7 @@ const Game = () => {
       setIsNewRound(true);
       setIsCorrectGuess(false);
       setCorrectAnimal("");
+      setIsModalOpen(false);
     });
 
     socket.on("guess_result", (data: string) => {
@@ -33,7 +34,7 @@ const Game = () => {
     });
 
     return () => {
-      socket.disconnect();
+      socket.off("guess_animal");
     };
   }, []);
 
@@ -43,6 +44,8 @@ const Game = () => {
         animal: selectedAnimal,
       });
       setSelectedAnimal("");
+      setIsNewRound(false);
+      setIsModalOpen(true);
     }
   };
 

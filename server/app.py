@@ -19,6 +19,7 @@ def index():
 
 @socketio.on('connect')
 def handle_connect():
+    global game_started
     if len(clients) < MAX_CLIENTS and not game_started:
         clients[request.sid] = {'guess': None}
         print(f'Jogador conectado. Total de jogadores: {len(clients)}')
