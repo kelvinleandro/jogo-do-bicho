@@ -1,15 +1,17 @@
+import random
+import time
 from flask import Flask, request
 from flask_socketio import SocketIO, emit, disconnect
-import random
 from animals import ANIMAIS
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 MAX_CLIENTS = 2
-allow_new_clients = True
+game_started = False
 clients = {}
 guesses = {}
+chosen_animal, chosen_numbers = None, None
 
 @app.route('/')
 def index():
@@ -17,14 +19,12 @@ def index():
 
 @socketio.on('connect')
 def handle_connect():
-    global allow_new_clients
-    if len(clients) < MAX_CLIENTS and allow_new_clients:
+    if len(clients) < MAX_CLIENTS and not game_started:
         clients[request.sid] = {'guess': None}
         print(f'Jogador conectado. Total de jogadores: {len(clients)}')
 
         if len(clients) == MAX_CLIENTS:
-            allow_new_clients = False
-            socketio.emit('start_game')
+            game_started = True
             start_new_round()
     else:
         emit('message', 'Número máximo de jogadores atingido. Desconectando...')
@@ -70,7 +70,7 @@ def evaluate_results():
     guesses.clear()
 
     # Inicia uma nova rodada automaticamente
-    socketio.emit('message', 'Nova rodada iniciando...')
+    time.sleep(5)
     start_new_round()
 
 if __name__ == '__main__':
