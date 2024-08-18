@@ -12,19 +12,16 @@ import {
 } from "@/components/ui/dialog";
 
 const Game = () => {
-  const [gameStarted, setGameStarted] = useState(false);
+  const [isNewRound, setIsNewRound] = useState(false);
   const [isCorrectGuess, setIsCorrectGuess] = useState(false);
   const [correctAnimal, setCorrectAnimal] = useState("a");
   const [selectedAnimal, setSelectedAnimal] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   useEffect(() => {
-    // socket.on("start_game", () => {
-    //   setGameStarted(true);
-    // });
-
     socket.on("guess_animal", () => {
       console.log("flag to guess animal");
+      setIsNewRound(true);
       setIsCorrectGuess(false);
       setCorrectAnimal("");
     });
@@ -51,7 +48,7 @@ const Game = () => {
 
   return (
     <div className="bg-slate-800 w-full h-screen py-8 flex flex-col justify-center items-center">
-      {!gameStarted ? (
+      {!isNewRound ? (
         <Placeholder text="Esperando uma nova rodada começar" />
       ) : (
         <div className="flex flex-col md:flex-row gap-4">
